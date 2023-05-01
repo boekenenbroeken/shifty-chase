@@ -1,0 +1,12 @@
+node_modules/
+dist
+.cache
+.DS_Store
+.parcel-cache
+
+# Editor directories and files
+.vscode
+
+# Log files
+yarn-debug.log*
+yarn-error.log*
