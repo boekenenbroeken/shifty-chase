@@ -28,7 +28,6 @@
       "jsx": true
     },
     "ecmaVersion": "latest",
-    "project": "./tsconfig.json",
     "sourceType": "module"
   },
   "plugins": ["import", "@typescript-eslint", "react", "react-hooks"],
@@ -60,6 +59,7 @@
         "tsx": "never"
       }
     ],
+    "no-case-declarations": 0,
     "no-param-reassign": ["error", { "props": false }],
     // React specific rules
     "react/jsx-uses-react": "off",
