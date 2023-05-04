@@ -1,5 +1,5 @@
 import { BoardState, Action } from './types';
-import { getMove, swap } from './utils';
+import { getMove, swap, shuffleArray, create2DArray } from './utils';
 
 const reducer = (state: BoardState, action: Action): BoardState => {
   switch (action.type) {
@@ -13,6 +13,18 @@ const reducer = (state: BoardState, action: Action): BoardState => {
       const newState = swap(state, action.y, action.x, newY, newX);
 
       return newState;
+
+    case 'shuffle':
+      const flattenedBoard = state.flat();
+
+      const shuffledArray = shuffleArray(flattenedBoard);
+      const shuffledBoard = create2DArray(
+        shuffledArray,
+        state.length,
+        state[0].length
+      );
+
+      return shuffledBoard;
 
     default:
       return state;
