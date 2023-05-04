@@ -24,7 +24,6 @@ const SlidingPuzzle = () => {
     >
       <h1>Sliding Puzzle</h1>
       <PuzzleBoard board={state} onMove={handleMove} />
-      <button onClick={() => console.log('shuffle')}>Shuffle</button>
     </div>
   );
 };
