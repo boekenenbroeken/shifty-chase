@@ -3,8 +3,10 @@
     "moduleResolution": "node",
     "target": "esnext",
     "isolatedModules": true,
+    "esModuleInterop": true,
     "jsx": "react-jsx",
     "baseUrl": "./src"
   },
+  "types": ["node", "jest", "@testing-library/jest-dom"],
   "include": ["src/**/*"]
 }

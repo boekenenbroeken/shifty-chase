@@ -1,7 +1,9 @@
+import { SlidingPuzzle } from 'components/SlidingPuzzle';
+
 const Home = () => {
   return (
     <div>
-      <h1>Hello world!</h1>
+      <SlidingPuzzle />
     </div>
   );
 };

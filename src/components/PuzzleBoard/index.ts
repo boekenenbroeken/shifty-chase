@@ -1,0 +1,1 @@
+export { PuzzleBoard } from './PuzzleBoard';
