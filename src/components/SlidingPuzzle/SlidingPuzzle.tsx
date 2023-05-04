@@ -18,12 +18,20 @@ const SlidingPuzzle = () => {
     dispatch({ type: 'move', y, x });
   };
 
+  const handleShuffle = () => {
+    dispatch({ type: 'shuffle' });
+  };
+
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
       <h1>Sliding Puzzle</h1>
       <PuzzleBoard board={state} onMove={handleMove} />
+
+      <button type="button" onClick={handleShuffle}>
+        Shuffle
+      </button>
     </div>
   );
 };

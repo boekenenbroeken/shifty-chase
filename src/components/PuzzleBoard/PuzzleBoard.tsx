@@ -7,7 +7,10 @@ type Props = {
 
 const PuzzleBoard = ({ board, onMove }: Props) => {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', width: '240px' }}>
+    <div
+      style={{ display: 'flex', flexWrap: 'wrap', width: '240px' }}
+      data-testid="puzzle-board"
+    >
       {board.map((row, rowIndex) =>
         row.map((value, colIndex) => (
           <PuzzlePiece
