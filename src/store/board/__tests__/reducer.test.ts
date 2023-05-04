@@ -26,4 +26,18 @@ describe('reducer', () => {
       expect(reducer(initialState, action)).toEqual(initialState);
     });
   });
+
+  describe('default', () => {
+    it('should return the state', () => {
+      const initialState = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 0, 8]
+      ];
+
+      const action = { type: 'unknown' } as unknown as Action;
+
+      expect(reducer(initialState, action)).toEqual(initialState);
+    });
+  });
 });
