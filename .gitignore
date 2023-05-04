@@ -3,6 +3,7 @@ dist
 .cache
 .DS_Store
 .parcel-cache
+coverage
 
 # Editor directories and files
 .vscode
