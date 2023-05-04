@@ -1,0 +1,1 @@
+export { PuzzlePiece } from './PuzzlePiece';

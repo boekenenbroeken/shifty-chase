@@ -4,5 +4,6 @@ module.exports = {
   testEnvironment: 'node',
   setupFilesAfterEnv: ['<rootDir>/support/setupTests.js'],
   testEnvironment: 'jsdom',
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!<rootDir>/node_modules/']
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!<rootDir>/node_modules/'],
+  moduleDirectories: ['node_modules', 'src']
 };
