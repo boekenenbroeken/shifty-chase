@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { SlidingPuzzle } from '../SlidingPuzzle';
 
 import { useReducer } from 'react';
@@ -46,6 +46,63 @@ describe('SlidingPuzzle', () => {
       type: 'move',
       y: 0,
       x: 0
+    });
+  });
+
+  it('should move the piece when clicked', () => {
+    const { getByTestId, getAllByTestId } = render(<SlidingPuzzle />);
+    const initialBoard = getByTestId('puzzle-board').textContent;
+
+    const puzzlePieces = getAllByTestId('puzzle-piece');
+    const firstPuzzlePiece = puzzlePieces[0];
+
+    fireEvent.click(firstPuzzlePiece);
+
+    waitFor(() => {
+      const movedBoard = getByTestId('puzzle-board').textContent;
+
+      expect(initialBoard).not.toEqual(movedBoard);
+    });
+  });
+
+  it('should not move the piece when clicked if it is not adjacent to the empty space', () => {
+    const { getByTestId, getAllByTestId } = render(<SlidingPuzzle />);
+    const initialBoard = getByTestId('puzzle-board').textContent;
+
+    const puzzlePieces = getAllByTestId('puzzle-piece');
+    const lastPuzzlePiece = puzzlePieces[8];
+
+    fireEvent.click(lastPuzzlePiece);
+
+    waitFor(() => {
+      const movedBoard = getByTestId('puzzle-board').textContent;
+
+      expect(initialBoard).toEqual(movedBoard);
+    });
+  });
+
+  it('dispatches shuffle action when shuffle button is clicked', () => {
+    const { getByText } = render(<SlidingPuzzle />);
+
+    const shuffleButton = getByText(/Shuffle/i);
+
+    fireEvent.click(shuffleButton);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: 'shuffle'
+    });
+  });
+
+  it('should shuffle the board when the shuffle button is clicked', () => {
+    const { getByTestId, getByRole } = render(<SlidingPuzzle />);
+    const initialBoard = getByTestId('puzzle-board').textContent;
+
+    fireEvent.click(getByRole('button', { name: /shuffle/i }));
+
+    waitFor(() => {
+      const shuffledBoard = getByTestId('puzzle-board').textContent;
+
+      expect(initialBoard).not.toEqual(shuffledBoard);
     });
   });
 });
