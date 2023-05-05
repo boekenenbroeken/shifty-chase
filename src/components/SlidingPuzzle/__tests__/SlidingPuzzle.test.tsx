@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { SlidingPuzzle } from '../SlidingPuzzle';
 
-import React, { useReducer } from 'react';
+import { useReducer } from 'react';
 
 import type { AppState } from 'store/types';
 
