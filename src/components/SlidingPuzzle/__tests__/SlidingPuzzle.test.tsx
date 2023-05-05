@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { SlidingPuzzle } from '../SlidingPuzzle';
 
-import { useReducer } from 'react';
+import React, { useReducer } from 'react';
 
 import type { AppState } from 'store/types';
 
@@ -41,6 +41,18 @@ describe('SlidingPuzzle', () => {
 
     const moveCount = getByText(/Move count/i);
     expect(moveCount).toBeInTheDocument();
+  });
+
+  it('should shuffle the board on mount', () => {
+    const { getByTestId } = render(<SlidingPuzzle />);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: 'shuffle'
+    });
+
+    waitFor(() => {
+      expect(getByTestId('puzzle-board').textContent).not.toEqual('123456780');
+    });
   });
 
   it('dispatches move action when puzzle piece is clicked', () => {
