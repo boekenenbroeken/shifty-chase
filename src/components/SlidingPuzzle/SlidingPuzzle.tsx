@@ -1,18 +1,24 @@
 import { useReducer } from 'react';
 
-import { reducer } from '../../store/board/reducer';
-import { BoardState } from '../../store/board/types';
+import { rootReducer } from '../../store/rootReducer';
 
 import { PuzzleBoard } from 'components/PuzzleBoard';
+import type { AppState } from 'store/types';
 
-const initialState: BoardState = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 0]
-];
+const initialState: AppState = {
+  board: [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 0]
+  ],
+  moveCount: 0
+};
 
 const SlidingPuzzle = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ board, moveCount }, dispatch] = useReducer(
+    rootReducer,
+    initialState
+  );
 
   const handleMove = (y: number, x: number) => {
     dispatch({ type: 'move', y, x });
@@ -27,7 +33,8 @@ const SlidingPuzzle = () => {
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
       <h1>Sliding Puzzle</h1>
-      <PuzzleBoard board={state} onMove={handleMove} />
+      <p>Move count: {moveCount}</p>
+      <PuzzleBoard board={board} onMove={handleMove} />
 
       <button type="button" onClick={handleShuffle}>
         Shuffle

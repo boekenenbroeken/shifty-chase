@@ -1,8 +1,9 @@
-import { BoardState } from '../../types';
 import { swap } from '../swap';
 
+import { Board } from 'store/board/types';
+
 describe('swap', () => {
-  let board: BoardState;
+  let board: Board;
 
   beforeEach(() => {
     board = [

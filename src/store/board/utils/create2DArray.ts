@@ -1,16 +1,16 @@
-import { BoardState } from '../types';
+import { Board } from '../types';
 
 const create2DArray = (
   flatArray: number[],
   numRows: number,
   numCols: number
-): BoardState => {
-  const boardState = [];
+): Board => {
+  const board = [];
   for (let i = 0; i < numRows; i++) {
-    boardState.push(flatArray.slice(i * numCols, (i + 1) * numCols));
+    board.push(flatArray.slice(i * numCols, (i + 1) * numCols));
   }
 
-  return boardState;
+  return board;
 };
 
 export { create2DArray };

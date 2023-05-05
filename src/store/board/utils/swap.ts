@@ -1,12 +1,12 @@
-import { BoardState } from '../types';
+import { Board } from '../types';
 
 const swap = (
-  board: BoardState,
+  board: Board,
   y1: number,
   x1: number,
   y2: number,
   x2: number
-): BoardState => {
+): Board => {
   try {
     const newBoard = [...board];
     const temp = newBoard[y1][x1];

@@ -3,13 +3,16 @@ import { SlidingPuzzle } from '../SlidingPuzzle';
 
 import { useReducer } from 'react';
 
-import { BoardState } from 'store/board/types';
+import type { AppState } from 'store/types';
 
-const initialState: BoardState = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 0]
-];
+const initialState: AppState = {
+  board: [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 0]
+  ],
+  moveCount: 0
+};
 
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
@@ -32,6 +35,12 @@ describe('SlidingPuzzle', () => {
 
     const puzzlePieces = getAllByTestId('puzzle-piece');
     expect(puzzlePieces).toHaveLength(9);
+
+    const shuffleButton = getByText(/Shuffle/i);
+    expect(shuffleButton).toBeInTheDocument();
+
+    const moveCount = getByText(/Move count/i);
+    expect(moveCount).toBeInTheDocument();
   });
 
   it('dispatches move action when puzzle piece is clicked', () => {
@@ -50,11 +59,16 @@ describe('SlidingPuzzle', () => {
   });
 
   it('should move the piece when clicked', () => {
-    const { getByTestId, getAllByTestId } = render(<SlidingPuzzle />);
+    const { getByTestId, getAllByTestId, getByText } = render(
+      <SlidingPuzzle />
+    );
     const initialBoard = getByTestId('puzzle-board').textContent;
 
     const puzzlePieces = getAllByTestId('puzzle-piece');
     const firstPuzzlePiece = puzzlePieces[0];
+    const moveCount = getByText(/Move count/i);
+
+    expect(moveCount).toHaveTextContent('Move count: 0');
 
     fireEvent.click(firstPuzzlePiece);
 
@@ -62,15 +76,21 @@ describe('SlidingPuzzle', () => {
       const movedBoard = getByTestId('puzzle-board').textContent;
 
       expect(initialBoard).not.toEqual(movedBoard);
+
+      expect(moveCount).toHaveTextContent('Move count: 1');
     });
   });
 
   it('should not move the piece when clicked if it is not adjacent to the empty space', () => {
-    const { getByTestId, getAllByTestId } = render(<SlidingPuzzle />);
+    const { getByTestId, getAllByTestId, getByText } = render(
+      <SlidingPuzzle />
+    );
     const initialBoard = getByTestId('puzzle-board').textContent;
 
     const puzzlePieces = getAllByTestId('puzzle-piece');
     const lastPuzzlePiece = puzzlePieces[8];
+
+    const moveCount = getByText(/Move count/i);
 
     fireEvent.click(lastPuzzlePiece);
 
@@ -78,6 +98,8 @@ describe('SlidingPuzzle', () => {
       const movedBoard = getByTestId('puzzle-board').textContent;
 
       expect(initialBoard).toEqual(movedBoard);
+
+      expect(moveCount).toHaveTextContent('Move count: 0');
     });
   });
 
@@ -103,6 +125,30 @@ describe('SlidingPuzzle', () => {
       const shuffledBoard = getByTestId('puzzle-board').textContent;
 
       expect(initialBoard).not.toEqual(shuffledBoard);
+    });
+  });
+
+  it('shoud reset move count when the shuffle button is clicked', () => {
+    const initialState: AppState = {
+      board: [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 0]
+      ],
+      moveCount: 5
+    };
+
+    const mockDispatch = jest.fn();
+    mockedUseReducer.mockReturnValue([initialState, mockDispatch]);
+
+    const { getByText, getByRole } = render(<SlidingPuzzle />);
+
+    const moveCount = getByText(/Move count/i);
+
+    fireEvent.click(getByRole('button', { name: /shuffle/i }));
+
+    waitFor(() => {
+      expect(moveCount).toHaveTextContent('Move count: 0');
     });
   });
 });

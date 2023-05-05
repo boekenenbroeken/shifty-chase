@@ -1,9 +1,10 @@
+import type { State } from '../types';
 import { reducer } from '../reducer';
-import { Action, BoardState } from '../types';
+import { Action } from '../types';
 
 describe('reducer', () => {
   describe('when given a "move" action', () => {
-    const initialState = [
+    const initialState: State = [
       [1, 2, 3],
       [4, 5, 6],
       [7, 0, 8]
@@ -27,23 +28,9 @@ describe('reducer', () => {
     });
   });
 
-  describe('default', () => {
-    it('should return the state', () => {
-      const initialState = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 0, 8]
-      ];
-
-      const action = { type: 'unknown' } as unknown as Action;
-
-      expect(reducer(initialState, action)).toEqual(initialState);
-    });
-  });
-
   describe('shuffle', () => {
     it('should shuffle the board state', () => {
-      const initialState: BoardState = [
+      const initialState: State = [
         [1, 2, 3],
         [4, 5, 6],
         [7, 8, 0]
@@ -67,6 +54,20 @@ describe('reducer', () => {
       expect(flattenedShuffledState.sort()).toEqual(
         flattenedInitialState.sort()
       );
+    });
+  });
+
+  describe('default', () => {
+    it('should return the state', () => {
+      const initialState: State = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 0, 8]
+      ];
+
+      const action = { type: 'unknown' } as unknown as Action;
+
+      expect(reducer(initialState, action)).toEqual(initialState);
     });
   });
 });
