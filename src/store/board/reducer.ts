@@ -1,7 +1,8 @@
-import { BoardState, Action } from './types';
+import type { AppActions } from 'store/types';
+import type { State } from './types';
 import { getMove, swap, shuffleArray, create2DArray } from './utils';
 
-const reducer = (state: BoardState, action: Action): BoardState => {
+const reducer = (state: State, action: AppActions): State => {
   switch (action.type) {
     case 'move':
       const newPosition = getMove(state, action.y, action.x);
@@ -10,9 +11,9 @@ const reducer = (state: BoardState, action: Action): BoardState => {
 
       const [newY, newX] = newPosition;
 
-      const newState = swap(state, action.y, action.x, newY, newX);
+      const newBoard = swap(state, action.y, action.x, newY, newX);
 
-      return newState;
+      return newBoard;
 
     case 'shuffle':
       const flattenedBoard = state.flat();
