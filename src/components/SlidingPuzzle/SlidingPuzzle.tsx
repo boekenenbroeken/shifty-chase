@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import { rootReducer } from '../../store/rootReducer';
 
@@ -27,6 +27,10 @@ const SlidingPuzzle = () => {
   const handleShuffle = () => {
     dispatch({ type: 'shuffle' });
   };
+
+  useEffect(() => {
+    handleShuffle();
+  }, []);
 
   return (
     <div

@@ -43,6 +43,18 @@ describe('SlidingPuzzle', () => {
     expect(moveCount).toBeInTheDocument();
   });
 
+  it('should shuffle the board on mount', () => {
+    const { getByTestId } = render(<SlidingPuzzle />);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: 'shuffle'
+    });
+
+    waitFor(() => {
+      expect(getByTestId('puzzle-board').textContent).not.toEqual('123456780');
+    });
+  });
+
   it('dispatches move action when puzzle piece is clicked', () => {
     const { getAllByTestId } = render(<SlidingPuzzle />);
 
