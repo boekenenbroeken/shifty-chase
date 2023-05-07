@@ -7,9 +7,21 @@ describe('swap', () => {
 
   beforeEach(() => {
     board = [
-      [1, 2, 3],
-      [4, 5, 6],
-      [7, 8, 9]
+      [
+        { value: 1, x: 0, y: 0 },
+        { value: 2, x: 1, y: 0 },
+        { value: 3, x: 2, y: 0 }
+      ],
+      [
+        { value: 4, x: 0, y: 1 },
+        { value: 5, x: 1, y: 1 },
+        { value: 6, x: 2, y: 1 }
+      ],
+      [
+        { value: 7, x: 0, y: 2 },
+        { value: 8, x: 1, y: 2 },
+        { value: 9, x: 2, y: 2 }
+      ]
     ];
   });
 
@@ -17,9 +29,21 @@ describe('swap', () => {
     const newBoard = swap(board, 1, 1, 2, 2);
 
     const expectedBoard = [
-      [1, 2, 3],
-      [4, 9, 6],
-      [7, 8, 5]
+      [
+        { value: 1, x: 0, y: 0 },
+        { value: 2, x: 1, y: 0 },
+        { value: 3, x: 2, y: 0 }
+      ],
+      [
+        { value: 4, x: 0, y: 1 },
+        { value: 9, x: 2, y: 2 },
+        { value: 6, x: 2, y: 1 }
+      ],
+      [
+        { value: 7, x: 0, y: 2 },
+        { value: 8, x: 1, y: 2 },
+        { value: 5, x: 1, y: 1 }
+      ]
     ];
 
     expect(newBoard).toEqual(expectedBoard);
@@ -37,12 +61,6 @@ describe('swap', () => {
   });
 
   it('should catch and log any errors thrown during swapping', () => {
-    const board = [
-      [1, 2, 3],
-      [4, 5, 6],
-      [7, 8, 9]
-    ];
-
     const spy = jest.spyOn(console, 'error').mockImplementation();
 
     expect(swap(board, 0, 1, 100, 200)).toEqual(board);
