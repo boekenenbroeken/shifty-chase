@@ -7,9 +7,21 @@ import type { AppState } from 'store/types';
 
 const initialState: AppState = {
   board: [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 0]
+    [
+      { value: 1, x: 0, y: 0 },
+      { value: 2, x: 1, y: 0 },
+      { value: 3, x: 2, y: 0 }
+    ],
+    [
+      { value: 4, x: 0, y: 1 },
+      { value: 5, x: 1, y: 1 },
+      { value: 6, x: 2, y: 1 }
+    ],
+    [
+      { value: 7, x: 0, y: 2 },
+      { value: 8, x: 1, y: 2 },
+      { value: 0, x: 2, y: 2 }
+    ]
   ],
   moveCount: 0
 };
@@ -51,7 +63,7 @@ describe('SlidingPuzzle', () => {
     });
 
     waitFor(() => {
-      expect(getByTestId('puzzle-board').textContent).not.toEqual('123456780');
+      expect(getByTestId('puzzle-board').textContent).not.toEqual('12345678');
     });
   });
 
@@ -143,9 +155,21 @@ describe('SlidingPuzzle', () => {
   it('shoud reset move count when the shuffle button is clicked', () => {
     const initialState: AppState = {
       board: [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 0]
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 },
+          { value: 3, x: 2, y: 0 }
+        ],
+        [
+          { value: 4, x: 0, y: 1 },
+          { value: 5, x: 1, y: 1 },
+          { value: 6, x: 2, y: 1 }
+        ],
+        [
+          { value: 7, x: 0, y: 2 },
+          { value: 8, x: 1, y: 2 },
+          { value: 0, x: 2, y: 2 }
+        ]
       ],
       moveCount: 5
     };

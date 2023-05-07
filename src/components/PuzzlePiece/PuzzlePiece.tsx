@@ -1,26 +1,33 @@
+import { StyledPuzzlePiece } from './PuzzlePiece.styles';
+import { getPosition } from './utils/getPosition';
+
 type Props = {
   value: number;
+  size?: number;
+  initialX: number;
+  initialY: number;
   onClick: () => void;
 };
 
-const PuzzlePiece = ({ value, onClick }: Props) => {
+const PuzzlePiece = ({ size, value, onClick, initialX, initialY }: Props) => {
+  const [positionX, positionY] = getPosition({
+    size,
+    rowIndex: initialY,
+    colIndex: initialX
+  });
+
   return (
-    <div
+    <StyledPuzzlePiece
       data-testid="puzzle-piece"
       onClick={onClick}
-      style={{
-        width: '80px',
-        height: '80px',
-        backgroundColor: value ? 'gray' : 'white',
-        color: 'white',
-        fontSize: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
+      key={`key-${value}`}
+      size={size}
+      value={value}
+      backgroundSize={`${size * 100}%`}
+      backgroundPosition={`${positionX}% ${positionY}%`}
     >
-      {value}
-    </div>
+      {value === 0 ? '' : value}
+    </StyledPuzzlePiece>
   );
 };
 
