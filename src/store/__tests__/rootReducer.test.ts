@@ -1,5 +1,5 @@
 import { rootReducer } from '../rootReducer';
-import { AppActions } from '../types';
+import type { AppActions } from '../types';
 
 const initialState = {
   board: [

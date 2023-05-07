@@ -1,6 +1,6 @@
 import type { State } from '../types';
 import { reducer } from '../reducer';
-import { Action } from '../types';
+import type { Action } from '../types';
 
 const initialState: State = [
   [

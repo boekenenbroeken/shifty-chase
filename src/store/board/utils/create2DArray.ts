@@ -1,4 +1,4 @@
-import { Board, PuzzlePiece } from '../types';
+import type { Board, PuzzlePiece } from '../types';
 
 const create2DArray = (
   flatArray: PuzzlePiece[],

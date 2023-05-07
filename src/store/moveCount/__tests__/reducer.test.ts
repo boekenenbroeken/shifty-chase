@@ -1,4 +1,4 @@
-import { AppActions } from 'store/types';
+import type { AppActions } from 'store/types';
 import { reducer } from '../reducer';
 
 describe('reducer', () => {
