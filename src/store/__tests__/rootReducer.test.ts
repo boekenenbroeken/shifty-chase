@@ -1,12 +1,23 @@
-import { waitFor } from '@testing-library/react';
 import { rootReducer } from '../rootReducer';
 import { AppActions } from '../types';
 
 const initialState = {
   board: [
-    [1, 2, 3],
-    [4, 0, 6],
-    [7, 8, 5]
+    [
+      { value: 1, x: 0, y: 0 },
+      { value: 2, x: 1, y: 0 },
+      { value: 3, x: 2, y: 0 }
+    ],
+    [
+      { value: 4, x: 0, y: 1 },
+      { value: 5, x: 1, y: 1 },
+      { value: 6, x: 2, y: 1 }
+    ],
+    [
+      { value: 7, x: 0, y: 2 },
+      { value: 8, x: 1, y: 2 },
+      { value: 0, x: 2, y: 2 }
+    ]
   ],
   moveCount: 0
 };
@@ -22,14 +33,24 @@ describe('rootReducer', () => {
     const action: AppActions = { type: 'move', y: 1, x: 2 };
     const state = rootReducer(initialState, action);
 
-    waitFor(() => {
-      expect(state.board).toEqual([
-        [1, 2, 3],
-        [4, 0, 6],
-        [7, 8, 5]
-      ]);
-      expect(state.moveCount).toEqual(1);
-    });
+    expect(state.board).toEqual([
+      [
+        { value: 1, x: 0, y: 0 },
+        { value: 2, x: 1, y: 0 },
+        { value: 3, x: 2, y: 0 }
+      ],
+      [
+        { value: 4, x: 0, y: 1 },
+        { value: 5, x: 1, y: 1 },
+        { value: 0, x: 2, y: 2 }
+      ],
+      [
+        { value: 7, x: 0, y: 2 },
+        { value: 8, x: 1, y: 2 },
+        { value: 6, x: 2, y: 1 }
+      ]
+    ]);
+    expect(state.moveCount).toEqual(1);
   });
 
   it('should handle a shuffle action', () => {

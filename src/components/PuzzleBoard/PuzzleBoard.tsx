@@ -1,28 +1,30 @@
 import { PuzzlePiece } from 'components/PuzzlePiece';
+import type { Board } from 'store/board/types';
+import { StyledPuzzleBoard } from './PuzzleBoard.styles';
 
 type Props = {
-  board: number[][];
+  board: Board;
   onMove: (y: number, x: number) => void;
 };
 
 const PuzzleBoard = ({ board, onMove }: Props) => {
   return (
-    <div
-      style={{ display: 'flex', flexWrap: 'wrap', width: '240px' }}
-      data-testid="puzzle-board"
-    >
+    <StyledPuzzleBoard size={board.length} data-testid="puzzle-board">
       {board.map((row, rowIndex) =>
-        row.map((value, colIndex) => (
+        row.map(({ value, x, y }, colIndex) => (
           <PuzzlePiece
             key={value}
             value={value}
+            initialX={x}
+            initialY={y}
+            size={board.length}
             onClick={() => {
               onMove(rowIndex, colIndex);
             }}
           />
         ))
       )}
-    </div>
+    </StyledPuzzleBoard>
   );
 };
 

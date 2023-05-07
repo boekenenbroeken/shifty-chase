@@ -1,16 +1,13 @@
 import { useEffect, useReducer } from 'react';
 
 import { rootReducer } from '../../store/rootReducer';
+import { createBoard } from './utils/createBoard';
 
 import { PuzzleBoard } from 'components/PuzzleBoard';
 import type { AppState } from 'store/types';
 
 const initialState: AppState = {
-  board: [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 0]
-  ],
+  board: createBoard(4),
   moveCount: 0
 };
 

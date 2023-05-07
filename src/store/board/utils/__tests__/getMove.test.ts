@@ -4,9 +4,21 @@ describe('getMove', () => {
   describe('it should return coordinates of the move', () => {
     it('move down', () => {
       const board = [
-        [1, 2, 3],
-        [4, 0, 6],
-        [7, 8, 5]
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 },
+          { value: 3, x: 2, y: 0 }
+        ],
+        [
+          { value: 4, x: 0, y: 1 },
+          { value: 0, x: 1, y: 1 },
+          { value: 6, x: 2, y: 1 }
+        ],
+        [
+          { value: 7, x: 0, y: 2 },
+          { value: 8, x: 1, y: 2 },
+          { value: 5, x: 2, y: 2 }
+        ]
       ];
 
       const move = getMove(board, 0, 1);
@@ -16,9 +28,21 @@ describe('getMove', () => {
 
     it('move up', () => {
       const board = [
-        [1, 0, 3],
-        [4, 1, 6],
-        [7, 8, 5]
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 0, x: 1, y: 0 },
+          { value: 3, x: 2, y: 0 }
+        ],
+        [
+          { value: 4, x: 0, y: 1 },
+          { value: 5, x: 1, y: 1 },
+          { value: 6, x: 2, y: 1 }
+        ],
+        [
+          { value: 7, x: 0, y: 2 },
+          { value: 8, x: 1, y: 2 },
+          { value: 2, x: 2, y: 2 }
+        ]
       ];
 
       const move = getMove(board, 1, 1);
@@ -28,9 +52,21 @@ describe('getMove', () => {
 
     it('move right', () => {
       const board = [
-        [1, 2, 0],
-        [4, 1, 6],
-        [7, 8, 5]
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 },
+          { value: 0, x: 2, y: 0 }
+        ],
+        [
+          { value: 4, x: 0, y: 1 },
+          { value: 3, x: 1, y: 1 },
+          { value: 6, x: 2, y: 1 }
+        ],
+        [
+          { value: 7, x: 0, y: 2 },
+          { value: 8, x: 1, y: 2 },
+          { value: 5, x: 2, y: 2 }
+        ]
       ];
 
       const move = getMove(board, 0, 1);
@@ -40,9 +76,21 @@ describe('getMove', () => {
 
     it('move left', () => {
       const board = [
-        [1, 2, 4],
-        [4, 0, 6],
-        [7, 8, 5]
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 },
+          { value: 3, x: 2, y: 0 }
+        ],
+        [
+          { value: 4, x: 0, y: 1 },
+          { value: 0, x: 1, y: 1 },
+          { value: 6, x: 2, y: 1 }
+        ],
+        [
+          { value: 7, x: 0, y: 2 },
+          { value: 8, x: 1, y: 2 },
+          { value: 5, x: 2, y: 2 }
+        ]
       ];
 
       const move = getMove(board, 1, 2);
@@ -53,9 +101,21 @@ describe('getMove', () => {
 
   it('should return null if the move is not found', () => {
     const board = [
-      [1, 2, 3],
-      [4, 0, 6],
-      [7, 8, 5]
+      [
+        { value: 1, x: 0, y: 0 },
+        { value: 2, x: 1, y: 0 },
+        { value: 3, x: 2, y: 0 }
+      ],
+      [
+        { value: 4, x: 0, y: 1 },
+        { value: 0, x: 1, y: 1 },
+        { value: 6, x: 2, y: 1 }
+      ],
+      [
+        { value: 7, x: 0, y: 2 },
+        { value: 8, x: 1, y: 2 },
+        { value: 5, x: 2, y: 2 }
+      ]
     ];
 
     const move = getMove(board, 0, 0);
