@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import img from './assets/great_wave.jpg';
+import img from 'assets/images/great_wave.jpg';
+
 interface PuzzlePieceProps {
   size: number;
   rowIndex: number;

@@ -64,6 +64,7 @@
     "types": "./src/types",
     "store": "./src/store",
     "api": "./src/api",
-    "styles": "./src/styles"
+    "styles": "./src/styles",
+    "assets": "./src/assets"
   }
 }
