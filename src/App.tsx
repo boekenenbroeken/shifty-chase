@@ -1,15 +1,22 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { SlidingPuzzle } from 'components/SlidingPuzzle';
+import type { AppState } from 'store/types';
+import { CSSReset } from 'styles/reset';
 
-import { Home } from 'pages/Home';
-
-import 'styles/reset.css';
+const initialState: AppState = {
+  board: {
+    initialBoard: null,
+    currentBoard: null,
+    isSolved: false,
+    level: 0
+  },
+  moveCount: 0
+};
 
 const App = () => (
-  <Router>
-    <Routes>
-      <Route path="/" element={<Home />} />
-    </Routes>
-  </Router>
+  <>
+    <CSSReset />
+    <SlidingPuzzle initialState={initialState} />
+  </>
 );
 
 export { App };
