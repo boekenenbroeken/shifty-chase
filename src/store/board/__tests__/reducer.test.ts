@@ -1,83 +1,148 @@
-import type { State } from '../types';
 import { reducer } from '../reducer';
-import { Action } from '../types';
-
-const initialState: State = [
-  [
-    { value: 1, x: 0, y: 0 },
-    { value: 2, x: 1, y: 0 },
-    { value: 3, x: 2, y: 0 }
-  ],
-  [
-    { value: 4, x: 0, y: 1 },
-    { value: 5, x: 1, y: 1 },
-    { value: 6, x: 2, y: 1 }
-  ],
-  [
-    { value: 7, x: 0, y: 2 },
-    { value: 8, x: 1, y: 2 },
-    { value: 0, x: 2, y: 2 }
-  ]
-];
+import type { Action } from '../types';
 
 describe('reducer', () => {
-  describe('when given a "move" action', () => {
-    it('should move the piece and return the new board state', () => {
-      const action = { type: 'move', y: 2, x: 1 } as Action;
-      const expectedState = [
-        [
-          { value: 1, x: 0, y: 0 },
-          { value: 2, x: 1, y: 0 },
-          { value: 3, x: 2, y: 0 }
-        ],
-        [
-          { value: 4, x: 0, y: 1 },
-          { value: 5, x: 1, y: 1 },
-          { value: 6, x: 2, y: 1 }
-        ],
-        [
-          { value: 7, x: 0, y: 2 },
-          { value: 0, x: 2, y: 2 },
-          { value: 8, x: 1, y: 2 }
-        ]
-      ];
+  describe('init', () => {
+    it('should initialize the board and shuffle it', () => {
+      const initialState = {
+        initialBoard: null,
+        currentBoard: null,
+        isSolved: false
+      };
+      const action: Action = { type: 'init', size: 3 };
+      const newState = reducer(initialState, action);
 
-      expect(reducer(initialState, action)).toEqual(expectedState);
+      expect(newState.initialBoard).toHaveLength(3);
+      expect(newState.currentBoard).toHaveLength(3);
+      expect(newState.isSolved).toBe(false);
+
+      // Ensure that the board is shuffled
+      const flatInitial = newState.initialBoard.flat().map(item => item.value);
+      const flatCurrent = newState.currentBoard.flat().map(item => item.value);
+      expect(flatInitial).not.toEqual(flatCurrent);
     });
 
-    it('should not move the piece if it is not adjacent to the empty space', () => {
-      const action = { type: 'move', y: 0, x: 0 } as Action;
-
-      expect(reducer(initialState, action)).toEqual(initialState);
+    it('should shuffle the board when the "shuffle" action is dispatched', () => {
+      const board = [
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 }
+        ],
+        [
+          { value: 3, x: 0, y: 1 },
+          { value: 0, x: 1, y: 1 }
+        ]
+      ];
+      const state = {
+        initialBoard: board,
+        currentBoard: board,
+        isSolved: false
+      };
+      const action: Action = { type: 'shuffle' };
+      const nextState = reducer(state, action);
+      expect(nextState.initialBoard).not.toEqual(nextState.currentBoard);
+      expect(nextState.currentBoard).toHaveLength(
+        nextState.initialBoard.length
+      );
+      expect(nextState.currentBoard[0]).toHaveLength(
+        nextState.initialBoard[0].length
+      );
+      expect(nextState.currentBoard[1]).toHaveLength(
+        nextState.initialBoard[1].length
+      );
     });
   });
 
-  describe('shuffle', () => {
-    it('should shuffle the board state', () => {
-      const action: Action = { type: 'shuffle' };
+  describe('move', () => {
+    it('should swap two puzzle pieces', () => {
+      const initialState = {
+        initialBoard: [
+          [
+            { value: 1, x: 0, y: 0 },
+            { value: 2, x: 1, y: 0 },
+            { value: 3, x: 2, y: 0 }
+          ],
+          [
+            { value: 4, x: 0, y: 1 },
+            { value: 5, x: 1, y: 1 },
+            { value: 6, x: 2, y: 1 }
+          ],
+          [
+            { value: 7, x: 0, y: 2 },
+            { value: 8, x: 1, y: 2 },
+            { value: 0, x: 2, y: 2 }
+          ]
+        ],
+        currentBoard: [
+          [
+            { value: 4, x: 0, y: 0 },
+            { value: 2, x: 1, y: 0 },
+            { value: 3, x: 2, y: 0 }
+          ],
+          [
+            { value: 1, x: 0, y: 1 },
+            { value: 5, x: 1, y: 1 },
+            { value: 6, x: 2, y: 1 }
+          ],
+          [
+            { value: 7, x: 0, y: 2 },
+            { value: 8, x: 1, y: 2 },
+            { value: 0, x: 2, y: 2 }
+          ]
+        ],
+        isSolved: false
+      };
+      const action: Action = { type: 'move', y: 0, x: 0, moveY: 0, moveX: 1 };
+      const newState = reducer(initialState, action);
 
-      // Ensure that the shuffled board state is different from the initial state
-      const shuffledState = reducer(initialState, action);
-      expect(shuffledState).not.toEqual(initialState);
+      expect(newState.currentBoard[0][0].value).toBe(2);
+      expect(newState.currentBoard[0][1].value).toBe(4);
+      expect(newState.isSolved).toBe(false);
+    });
 
-      // Ensure that the shuffled board state has the same dimensions as the initial state
-      expect(shuffledState.length).toEqual(initialState.length);
-      expect(shuffledState[0].length).toEqual(initialState[0].length);
+    it('should do nothing if puzzle piece cannot be moved', () => {
+      const initialBoard = [
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 }
+        ],
+        [
+          { value: 3, x: 1, y: 1 },
+          { value: 0, x: 0, y: 1 }
+        ]
+      ];
+      const currentBoard = [
+        [
+          { value: 1, x: 0, y: 0 },
+          { value: 2, x: 1, y: 0 }
+        ],
+        [
+          { value: 0, x: 1, y: 1 },
+          { value: 3, x: 0, y: 1 }
+        ]
+      ];
 
-      // Ensure that the shuffled board state has the same elements as the initial state
-      const flattenedInitialState = initialState.flat();
-      const flattenedShuffledState = shuffledState.flat();
+      const state = {
+        initialBoard: initialBoard,
+        currentBoard: currentBoard,
+        isSolved: false
+      };
 
-      expect(flattenedShuffledState).toHaveLength(flattenedInitialState.length);
+      const action: Action = { type: 'move', y: 0, x: 0, moveY: 0, moveX: 0 };
+      const nextState = reducer(state, action);
 
-      expect(flattenedShuffledState.sort((a, b) => a.value - b.value)).toEqual(
-        flattenedInitialState.sort((a, b) => a.value - b.value)
-      );
+      expect(nextState).toEqual(state);
     });
   });
 
   describe('default', () => {
     it('should return the state', () => {
+      const initialState = {
+        initialBoard: null,
+        currentBoard: null,
+        isSolved: false
+      };
+
       const action = { type: 'unknown' } as unknown as Action;
 
       expect(reducer(initialState, action)).toEqual(initialState);

@@ -1,4 +1,4 @@
-import { Board } from '../types';
+import type { Board } from '../types';
 
 const getMove = (board: Board, y: number, x: number) => {
   const DIRECTIONS = [

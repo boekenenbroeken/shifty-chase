@@ -1,31 +1,39 @@
+import { createBoard } from 'components/SlidingPuzzle/utils/createBoard';
 import type { AppActions } from 'store/types';
 import type { State } from './types';
-import { getMove, swap, shuffleArray, create2DArray } from './utils';
+import { swap, shuffleBoard, checkIsSolved } from './utils';
 
 const reducer = (state: State, action: AppActions): State => {
   switch (action.type) {
-    case 'move':
-      const newPosition = getMove(state, action.y, action.x);
+    case 'init': {
+      const board = createBoard(action.size);
 
-      if (!newPosition) return state;
+      return {
+        initialBoard: board,
+        currentBoard: shuffleBoard(board),
+        isSolved: false
+      };
+    }
 
-      const [newY, newX] = newPosition;
-
-      const newBoard = swap(state, action.y, action.x, newY, newX);
-
-      return newBoard;
-
-    case 'shuffle':
-      const flattenedBoard = state.flat();
-
-      const shuffledArray = shuffleArray(flattenedBoard);
-      const shuffledBoard = create2DArray(
-        shuffledArray,
-        state.length,
-        state[0].length
+    case 'move': {
+      const board = swap(
+        state.currentBoard,
+        action.y,
+        action.x,
+        action.moveY,
+        action.moveX
       );
 
-      return shuffledBoard;
+      const isSolved = checkIsSolved(state.initialBoard, board);
+
+      return { ...state, currentBoard: board, isSolved };
+    }
+
+    case 'shuffle': {
+      const shuffledBoard = shuffleBoard(state.currentBoard);
+
+      return { ...state, currentBoard: shuffledBoard, isSolved: false };
+    }
 
     default:
       return state;

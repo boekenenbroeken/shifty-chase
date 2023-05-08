@@ -1,6 +1,6 @@
 import { swap } from '../swap';
 
-import { Board } from 'store/board/types';
+import type { Board } from 'store/board/types';
 
 describe('swap', () => {
   let board: Board;
