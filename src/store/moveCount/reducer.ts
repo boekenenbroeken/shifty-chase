@@ -9,6 +9,9 @@ const reducer = (state: State, action: AppActions): State => {
     case 'shuffle':
       return 0;
 
+    case 'levelup':
+      return 0;
+
     default:
       return state;
   }

@@ -11,6 +11,7 @@ const reducer = (state: State, action: AppActions): State => {
       return {
         initialBoard: board,
         currentBoard: shuffleBoard(board),
+        level: action.size,
         isSolved: false
       };
     }
@@ -33,6 +34,18 @@ const reducer = (state: State, action: AppActions): State => {
       const shuffledBoard = shuffleBoard(state.currentBoard);
 
       return { ...state, currentBoard: shuffledBoard, isSolved: false };
+    }
+
+    case 'levelup': {
+      const nextLevel = state.level + 1;
+      const board = createBoard(nextLevel);
+
+      return {
+        initialBoard: board,
+        currentBoard: shuffleBoard(board),
+        level: nextLevel,
+        isSolved: false
+      };
     }
 
     default:

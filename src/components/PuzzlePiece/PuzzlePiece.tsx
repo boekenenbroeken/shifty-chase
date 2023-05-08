@@ -20,7 +20,6 @@ const PuzzlePiece = ({ size, value, onClick, initialX, initialY }: Props) => {
     <StyledPuzzlePiece
       data-testid="puzzle-piece"
       onClick={onClick}
-      key={`key-${value}`}
       size={size}
       value={value}
       backgroundSize={`${size * 100}%`}

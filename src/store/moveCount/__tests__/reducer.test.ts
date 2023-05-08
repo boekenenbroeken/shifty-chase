@@ -26,6 +26,14 @@ describe('reducer', () => {
     expect(state).toEqual(0);
   });
 
+  it('should handle the levelup action', () => {
+    const initialState = 2;
+    const action = { type: 'levelup' } as AppActions;
+    const state = reducer(initialState, action);
+
+    expect(state).toEqual(0);
+  });
+
   it('should handle an unknown action', () => {
     const initialState = 0;
     const action = { type: 'unknown' } as unknown as AppActions;
