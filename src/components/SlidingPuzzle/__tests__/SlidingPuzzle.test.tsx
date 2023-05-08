@@ -1,7 +1,5 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, RenderResult } from '@testing-library/react';
 import { SlidingPuzzle } from '../SlidingPuzzle';
-
-import { useReducer } from 'react';
 
 import type { AppState } from 'store/types';
 
@@ -23,155 +21,174 @@ const board = [
   ]
 ];
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useReducer: jest.fn()
-}));
+const getInitialState = (state?: {
+  board?: Partial<AppState['board']>;
+  moveCount?: AppState['moveCount'];
+}): AppState => ({
+  board: {
+    initialBoard: board,
+    currentBoard: board,
+    isSolved: false,
+    level: 3,
+    ...state?.board
+  },
+  moveCount: state?.moveCount ?? 0
+});
 
-const mockedUseReducer = useReducer as unknown as jest.MockedFn<
-  typeof useReducer
->;
+const getShuffleButton = (screen: RenderResult) =>
+  screen.getByRole('button', { name: /shuffle/i });
+
+const getMoveCount = (screen: RenderResult) => screen.getByText(/Move count/i);
+
+const getPuzzleBoard = (screen: RenderResult) =>
+  screen.getByTestId('puzzle-board');
+
+const getAllPuzzlePieces = (screen: RenderResult) =>
+  screen.getAllByTestId('puzzle-piece');
+
+const getStartButton = (screen: RenderResult) =>
+  screen.getByRole('button', { name: /start/i });
+
+const getNextLevelButton = (screen: RenderResult) =>
+  screen.getByRole('button', { name: /Next level/i });
+
+beforeEach(() => {
+  jest.resetAllMocks();
+});
 
 describe('SlidingPuzzle', () => {
   describe('when the board is initialized', () => {
-    const initialState: AppState = {
-      board: {
-        initialBoard: board,
-        currentBoard: board,
-        isSolved: false
-      },
-      moveCount: 0
-    };
-
-    const mockDispatch = jest.fn();
-    mockedUseReducer.mockReturnValue([initialState, mockDispatch]);
-
     it('renders the Sliding Puzzle component', () => {
-      const { getByText, getAllByTestId } = render(<SlidingPuzzle />);
+      const initialState = getInitialState();
 
-      const heading = getByText(/Sliding Puzzle/i);
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+
+      const heading = screen.getByText(/Sliding Puzzle/i);
       expect(heading).toBeInTheDocument();
 
-      const puzzlePieces = getAllByTestId('puzzle-piece');
-      expect(puzzlePieces).toHaveLength(9);
+      const puzzlePieces = getAllPuzzlePieces(screen);
+      expect(puzzlePieces).toHaveLength(
+        initialState.board.currentBoard.flat().length
+      );
 
-      const shuffleButton = getByText(/Shuffle/i);
+      const shuffleButton = getShuffleButton(screen);
       expect(shuffleButton).toBeInTheDocument();
 
-      const moveCount = getByText(/Move count/i);
+      const moveCount = getMoveCount(screen);
       expect(moveCount).toBeInTheDocument();
     });
 
-    it('dispatches move action when puzzle piece is clicked', () => {
-      const { getAllByTestId } = render(<SlidingPuzzle />);
-
-      const puzzlePieces = getAllByTestId('puzzle-piece');
-
-      const moveablePuzzlePiece = puzzlePieces[7];
-
-      fireEvent.click(moveablePuzzlePiece);
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: 'move',
-        y: 2,
-        x: 1,
-        moveY: 2,
-        moveX: 2
+    it('should initialize board when start button is clicked', () => {
+      const initialState = getInitialState({
+        board: {
+          currentBoard: null,
+          initialBoard: null,
+          level: 0,
+          isSolved: false
+        }
       });
+
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+
+      const startButton = getStartButton(screen);
+
+      fireEvent.click(startButton);
+
+      expect(getPuzzleBoard(screen)).toBeInTheDocument();
+      expect(getShuffleButton(screen)).toBeInTheDocument();
+      expect(getNextLevelButton(screen)).toBeInTheDocument();
+      expect(getAllPuzzlePieces(screen)).toHaveLength(9);
+      expect(getMoveCount(screen)).toHaveTextContent('Move count: 0');
+    });
+
+    it('should go to the next level when the next level button is clicked', () => {
+      const initialState = getInitialState({
+        board: { isSolved: true },
+        moveCount: 10
+      });
+
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+
+      expect(getMoveCount(screen)).toHaveTextContent('Move count: 10');
+      expect(getAllPuzzlePieces(screen)).toHaveLength(
+        initialState.board.level ** 2
+      );
+
+      fireEvent.click(getNextLevelButton(screen));
+
+      expect(getMoveCount(screen)).toHaveTextContent('Move count: 0');
+      expect(getAllPuzzlePieces(screen)).toHaveLength(
+        (initialState.board.level + 1) ** 2
+      );
     });
 
     it('should move the piece when clicked', () => {
-      const { getByTestId, getAllByTestId, getByText } = render(
-        <SlidingPuzzle />
-      );
-      const initialBoard = getByTestId('puzzle-board').textContent;
+      const initialState = getInitialState();
 
-      const puzzlePieces = getAllByTestId('puzzle-piece');
-      const firstPuzzlePiece = puzzlePieces[0];
-      const moveCount = getByText(/Move count/i);
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+
+      const puzzlePieces = getAllPuzzlePieces(screen);
+
+      const moveablePiece = puzzlePieces[7];
+      const emptyPiece = puzzlePieces[8];
+      const moveCount = getMoveCount(screen);
 
       expect(moveCount).toHaveTextContent('Move count: 0');
 
-      fireEvent.click(firstPuzzlePiece);
+      fireEvent.click(moveablePiece);
 
-      waitFor(() => {
-        const movedBoard = getByTestId('puzzle-board').textContent;
+      const newPuzzlePieces = getAllPuzzlePieces(screen);
 
-        expect(initialBoard).not.toEqual(movedBoard);
-
-        expect(moveCount).toHaveTextContent('Move count: 1');
-      });
+      expect(newPuzzlePieces[7]).toBe(emptyPiece);
+      expect(newPuzzlePieces[8]).toBe(moveablePiece);
+      expect(moveCount).toHaveTextContent('Move count: 1');
     });
 
     it('should not move the piece when clicked if it is not adjacent to the empty space', () => {
-      const { getByTestId, getAllByTestId, getByText } = render(
-        <SlidingPuzzle />
+      const initialState = getInitialState();
+
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+
+      const initialBoard = getPuzzleBoard(screen).textContent;
+
+      const puzzlePieces = getAllPuzzlePieces(screen);
+
+      const emptyPuzzlePiece = puzzlePieces.find(
+        item => item.textContent === ''
       );
-      const initialBoard = getByTestId('puzzle-board').textContent;
 
-      const puzzlePieces = getAllByTestId('puzzle-piece');
-      const lastPuzzlePiece = puzzlePieces[8];
+      const moveCount = getMoveCount(screen);
 
-      const moveCount = getByText(/Move count/i);
+      fireEvent.click(emptyPuzzlePiece);
 
-      fireEvent.click(lastPuzzlePiece);
+      const movedBoard = getPuzzleBoard(screen).textContent;
 
-      waitFor(() => {
-        const movedBoard = getByTestId('puzzle-board').textContent;
-
-        expect(initialBoard).toEqual(movedBoard);
-
-        expect(moveCount).toHaveTextContent('Move count: 0');
-      });
-    });
-
-    it('dispatches shuffle action when shuffle button is clicked', () => {
-      const { getByText } = render(<SlidingPuzzle />);
-
-      const shuffleButton = getByText(/Shuffle/i);
-
-      fireEvent.click(shuffleButton);
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: 'shuffle'
-      });
+      expect(initialBoard).toEqual(movedBoard);
+      expect(moveCount).toHaveTextContent('Move count: 0');
     });
 
     it('should shuffle the board when the shuffle button is clicked', () => {
-      const { getByTestId, getByRole } = render(<SlidingPuzzle />);
-      const initialBoard = getByTestId('puzzle-board').textContent;
+      const initialState = getInitialState();
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+      const initialBoard = getPuzzleBoard(screen).textContent;
 
-      fireEvent.click(getByRole('button', { name: /shuffle/i }));
+      fireEvent.click(getShuffleButton(screen));
 
-      waitFor(() => {
-        const shuffledBoard = getByTestId('puzzle-board').textContent;
+      const shuffledBoard = getPuzzleBoard(screen).textContent;
 
-        expect(initialBoard).not.toEqual(shuffledBoard);
-      });
+      expect(initialBoard).not.toEqual(shuffledBoard);
     });
 
     it('shoud reset move count when the shuffle button is clicked', () => {
-      const initialState: AppState = {
-        board: {
-          initialBoard: board,
-          currentBoard: board,
-          isSolved: false
-        },
-        moveCount: 0
-      };
+      const initialState = getInitialState({ moveCount: 10 });
 
-      const mockDispatch = jest.fn();
-      mockedUseReducer.mockReturnValue([initialState, mockDispatch]);
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
 
-      const { getByText, getByRole } = render(<SlidingPuzzle />);
+      expect(getMoveCount(screen)).toHaveTextContent('Move count: 10');
 
-      const moveCount = getByText(/Move count/i);
+      fireEvent.click(getShuffleButton(screen));
 
-      fireEvent.click(getByRole('button', { name: /shuffle/i }));
-
-      waitFor(() => {
-        expect(moveCount).toHaveTextContent('Move count: 0');
-      });
+      expect(getMoveCount(screen)).toHaveTextContent('Move count: 0');
     });
   });
 });

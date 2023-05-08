@@ -1,20 +1,26 @@
+import { createBoard } from 'components/SlidingPuzzle/utils/createBoard';
 import { reducer } from '../reducer';
 import type { Action } from '../types';
+
+const BLANK_STATE = {
+  initialBoard: null,
+  currentBoard: null,
+  level: 0,
+  isSolved: false
+};
 
 describe('reducer', () => {
   describe('init', () => {
     it('should initialize the board and shuffle it', () => {
-      const initialState = {
-        initialBoard: null,
-        currentBoard: null,
-        isSolved: false
-      };
       const action: Action = { type: 'init', size: 3 };
-      const newState = reducer(initialState, action);
+      const newState = reducer(BLANK_STATE, action);
 
       expect(newState.initialBoard).toHaveLength(3);
+      expect(newState.initialBoard[0]).toHaveLength(3);
       expect(newState.currentBoard).toHaveLength(3);
+      expect(newState.currentBoard[0]).toHaveLength(3);
       expect(newState.isSolved).toBe(false);
+      expect(newState.level).toBe(3);
 
       // Ensure that the board is shuffled
       const flatInitial = newState.initialBoard.flat().map(item => item.value);
@@ -23,21 +29,16 @@ describe('reducer', () => {
     });
 
     it('should shuffle the board when the "shuffle" action is dispatched', () => {
-      const board = [
-        [
-          { value: 1, x: 0, y: 0 },
-          { value: 2, x: 1, y: 0 }
-        ],
-        [
-          { value: 3, x: 0, y: 1 },
-          { value: 0, x: 1, y: 1 }
-        ]
-      ];
+      const level = 2;
+      const board = createBoard(level);
+
       const state = {
         initialBoard: board,
         currentBoard: board,
+        level,
         isSolved: false
       };
+
       const action: Action = { type: 'shuffle' };
       const nextState = reducer(state, action);
       expect(nextState.initialBoard).not.toEqual(nextState.currentBoard);
@@ -90,6 +91,7 @@ describe('reducer', () => {
             { value: 0, x: 2, y: 2 }
           ]
         ],
+        level: 3,
         isSolved: false
       };
       const action: Action = { type: 'move', y: 0, x: 0, moveY: 0, moveX: 1 };
@@ -125,6 +127,7 @@ describe('reducer', () => {
       const state = {
         initialBoard: initialBoard,
         currentBoard: currentBoard,
+        level: 3,
         isSolved: false
       };
 
@@ -135,17 +138,25 @@ describe('reducer', () => {
     });
   });
 
+  describe('levelup', () => {
+    it('should increase the level and expand the board', () => {
+      const initialState = reducer(BLANK_STATE, { type: 'init', size: 3 });
+      const nextLevelState = reducer(initialState, { type: 'levelup' });
+
+      expect(nextLevelState.level).toEqual(4);
+      expect(nextLevelState.initialBoard.length).toEqual(4);
+      expect(nextLevelState.initialBoard[0].length).toEqual(4);
+      expect(nextLevelState.currentBoard.length).toEqual(4);
+      expect(nextLevelState.currentBoard[0].length).toEqual(4);
+      expect(nextLevelState.isSolved).toEqual(false);
+    });
+  });
+
   describe('default', () => {
     it('should return the state', () => {
-      const initialState = {
-        initialBoard: null,
-        currentBoard: null,
-        isSolved: false
-      };
-
       const action = { type: 'unknown' } as unknown as Action;
 
-      expect(reducer(initialState, action)).toEqual(initialState);
+      expect(reducer(BLANK_STATE, action)).toEqual(BLANK_STATE);
     });
   });
 });

@@ -7,16 +7,11 @@ import type { AppState } from 'store/types';
 import { getMove } from 'store/board/utils';
 import img from 'assets/images/great_wave.jpg';
 
-const initialState: AppState = {
-  board: {
-    initialBoard: null,
-    currentBoard: null,
-    isSolved: false
-  },
-  moveCount: 0
+type Props = {
+  initialState: AppState;
 };
 
-const SlidingPuzzle = () => {
+const SlidingPuzzle = ({ initialState }: Props) => {
   const [{ board, moveCount }, dispatch] = useReducer(
     rootReducer,
     initialState
@@ -24,6 +19,7 @@ const SlidingPuzzle = () => {
 
   const handleMove = (y: number, x: number) => {
     if (!board.currentBoard) return;
+    if (board.isSolved) return;
 
     const move = getMove(board.currentBoard, y, x);
 
@@ -42,6 +38,10 @@ const SlidingPuzzle = () => {
     dispatch({ type: 'shuffle' });
   };
 
+  const handleNextLevel = () => {
+    dispatch({ type: 'levelup' });
+  };
+
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -55,6 +55,13 @@ const SlidingPuzzle = () => {
           </p>
           <button type="button" onClick={handleShuffle}>
             Shuffle
+          </button>
+          <button
+            type="button"
+            onClick={handleNextLevel}
+            disabled={!board.isSolved}
+          >
+            Next level
           </button>
         </>
       ) : (
