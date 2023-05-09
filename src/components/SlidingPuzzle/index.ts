@@ -1,0 +1,1 @@
+export { SlidingPuzzle } from './SlidingPuzzle';

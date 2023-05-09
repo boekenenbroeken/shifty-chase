@@ -1,8 +1,0 @@
-{
-  "plugins": {
-    "postcss-simple-vars": {
-      "variables": {}
-    },
-    "postcss-nested": {}
-  }
-}
