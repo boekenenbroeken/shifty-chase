@@ -4,7 +4,9 @@
 
 [DEMO](gorgeous-flan-7a1152.netlify.app)
 
-Shifty Chase is a simple web application for playing a sliding puzzle game. The game is built using Parcel, React, and Typescript. The game allows the user to slide tiles to arrange them in the correct order and win the game. 
+Shifty Chase is an engaging sliding puzzle game built with Parcel, React, and Typescript. It challenges players to rearrange a set of tiles in the correct order to win the game. The game is designed to provide players with a fun and challenging puzzle-solving experience, which can help improve their cognitive skills such as logic, problem-solving, and decision-making.
+
+The user interface of Shifty Chase is inspired by the Gabriel Zevin novel "Tomorrow and Tomorrow and Tomorrow". The design aims to give the game an 80s retro look and feel.
 
 ## Installation
 
