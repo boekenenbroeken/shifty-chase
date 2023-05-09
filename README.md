@@ -2,6 +2,8 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/01399f58-fa4e-4de3-8fa3-9a61d093a675/deploy-status)](https://app.netlify.com/sites/gorgeous-flan-7a1152/deploys)
 
+[DEMO](gorgeous-flan-7a1152.netlify.app)
+
 Shifty Chase is a simple web application for playing a sliding puzzle game. The game is built using Parcel, React, and Typescript. The game allows the user to slide tiles to arrange them in the correct order and win the game. 
 
 ## Installation
