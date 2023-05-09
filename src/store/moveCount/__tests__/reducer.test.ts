@@ -1,5 +1,6 @@
 import type { AppActions } from 'store/types';
 import { reducer } from '../reducer';
+import { ActionTypes as BoardActionTypes } from '../../board/types';
 
 describe('reducer', () => {
   it('should return the initial state', () => {
@@ -12,7 +13,7 @@ describe('reducer', () => {
 
   it('should handle the move action', () => {
     const initialState = 0;
-    const action = { type: 'move' } as AppActions;
+    const action = { type: BoardActionTypes.MOVE } as AppActions;
     const state = reducer(initialState, action);
 
     expect(state).toEqual(initialState + 1);
@@ -20,7 +21,7 @@ describe('reducer', () => {
 
   it('should handle the shuffle action', () => {
     const initialState = 2;
-    const action = { type: 'shuffle' } as AppActions;
+    const action = { type: BoardActionTypes.SHUFFLE } as AppActions;
     const state = reducer(initialState, action);
 
     expect(state).toEqual(0);
@@ -28,7 +29,7 @@ describe('reducer', () => {
 
   it('should handle the levelup action', () => {
     const initialState = 2;
-    const action = { type: 'levelup' } as AppActions;
+    const action = { type: BoardActionTypes.LEVELUP } as AppActions;
     const state = reducer(initialState, action);
 
     expect(state).toEqual(0);
@@ -36,7 +37,9 @@ describe('reducer', () => {
 
   it('should handle an unknown action', () => {
     const initialState = 0;
-    const action = { type: 'unknown' } as unknown as AppActions;
+    const action = { type: 'unknown' };
+
+    // @ts-expect-error
     const state = reducer(initialState, action);
 
     expect(state).toEqual(initialState);

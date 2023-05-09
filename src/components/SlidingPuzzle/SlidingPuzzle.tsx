@@ -1,11 +1,17 @@
 import { useReducer } from 'react';
 
-import { rootReducer } from '../../store/rootReducer';
-
 import { PuzzleBoard } from 'components/PuzzleBoard';
-import type { AppState } from 'store/types';
+import { Container } from 'components/Container';
+import { Heading } from 'components/Heading';
+import { Button } from 'components/Button';
+import { MoveCount } from 'components/MoveCount';
+import { Congrats } from 'components/Congrats';
+import { AppState, BoardActionTypes } from 'store/types';
+import { rootReducer } from 'store/rootReducer';
 import { getMove } from 'store/board/utils';
 import img from 'assets/images/great_wave.jpg';
+
+import { StyledImg, StyledButtonsContainer } from './SlidingPuzzle.style';
 
 type Props = {
   initialState: AppState;
@@ -27,56 +33,54 @@ const SlidingPuzzle = ({ initialState }: Props) => {
 
     const [moveY, moveX] = move;
 
-    dispatch({ type: 'move', y, x, moveY, moveX });
+    dispatch({ type: BoardActionTypes.MOVE, y, x, moveY, moveX });
   };
 
   const handleStart = () => {
-    dispatch({ type: 'init', size: 3 });
+    dispatch({ type: BoardActionTypes.INIT, size: 3 });
   };
 
   const handleShuffle = () => {
-    dispatch({ type: 'shuffle' });
+    dispatch({ type: BoardActionTypes.SHUFFLE });
   };
 
   const handleNextLevel = () => {
-    dispatch({ type: 'levelup' });
+    dispatch({ type: BoardActionTypes.LEVELUP });
   };
 
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-    >
-      <h1>Sliding Puzzle</h1>
+    <Container>
+      <Heading>Shifty chase</Heading>
       {board.currentBoard ? (
         <>
-          <PuzzleBoard board={board.currentBoard} onMove={handleMove} />
-          <p>
-            Move count: {moveCount} {board.isSolved && 'Yaaay! It is solved'}
-          </p>
-          <button type="button" onClick={handleShuffle}>
-            Shuffle
-          </button>
-          <button
-            type="button"
-            onClick={handleNextLevel}
-            disabled={!board.isSolved}
-          >
-            Next level
-          </button>
+          <MoveCount count={moveCount} />
+          <PuzzleBoard
+            board={board.currentBoard}
+            onMove={handleMove}
+            isSolved={board.isSolved}
+          />
+
+          {board.isSolved && <Congrats />}
+          <StyledButtonsContainer>
+            <Button
+              onClick={handleNextLevel}
+              disabled={!board.isSolved}
+              theme="blue"
+            >
+              Next level
+            </Button>
+            <Button onClick={handleShuffle}>Shuffle</Button>
+          </StyledButtonsContainer>
         </>
       ) : (
         <>
-          <img src={img} width="500" height="500" />
-          <button
-            style={{ marginTop: '24px' }}
-            type="button"
-            onClick={handleStart}
-          >
-            Start
-          </button>
+          <StyledImg src={img} />
+          <Button theme="pink" onClick={handleStart}>
+            Start Game
+          </Button>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 
