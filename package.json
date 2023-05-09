@@ -13,7 +13,8 @@
     "lint:js": "eslint . --ext .ts,.tsx",
     "prettify": "yarn prettier '**/*.(ts|tsx|css)' --write",
     "update:cssdb": "yarn bin browserslist --update-db",
-    "test": "jest"
+    "test": "jest",
+    "test-coverage": "jest --collectCoverage"
   },
   "dependencies": {
     "react": "^18",
@@ -56,6 +57,7 @@
     "types": "./src/types",
     "store": "./src/store",
     "styles": "./src/styles",
-    "assets": "./src/assets"
+    "assets": "./src/assets",
+    "utils": "./src/utils"
   }
 }

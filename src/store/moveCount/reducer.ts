@@ -1,15 +1,16 @@
 import type { AppActions } from 'store/types';
 import type { State } from './types';
+import { ActionTypes as BoardActionTypes } from '../board/types';
 
 const reducer = (state: State, action: AppActions): State => {
   switch (action.type) {
-    case 'move':
+    case BoardActionTypes.MOVE:
       return state + 1;
 
-    case 'shuffle':
+    case BoardActionTypes.SHUFFLE:
       return 0;
 
-    case 'levelup':
+    case BoardActionTypes.LEVELUP:
       return 0;
 
     default:

@@ -28,7 +28,7 @@ describe('PuzzleBoard', () => {
 
   it('should render the puzzle board', () => {
     const { getAllByTestId } = render(
-      <PuzzleBoard board={board} onMove={onMove} />
+      <PuzzleBoard board={board} onMove={onMove} isSolved={false} />
     );
 
     expect(getAllByTestId('puzzle-piece')).toHaveLength(9);
@@ -36,7 +36,7 @@ describe('PuzzleBoard', () => {
 
   it('should call onMove with correct arguments when puzzle piece is clicked', () => {
     const { getAllByTestId } = render(
-      <PuzzleBoard board={board} onMove={onMove} />
+      <PuzzleBoard board={board} onMove={onMove} isSolved={false} />
     );
     const puzzlePieces = getAllByTestId('puzzle-piece');
 

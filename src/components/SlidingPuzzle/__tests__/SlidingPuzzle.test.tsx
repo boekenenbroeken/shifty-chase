@@ -63,7 +63,7 @@ describe('SlidingPuzzle', () => {
 
       const screen = render(<SlidingPuzzle initialState={initialState} />);
 
-      const heading = screen.getByText(/Sliding Puzzle/i);
+      const heading = screen.getByText(/Shifty chase/i);
       expect(heading).toBeInTheDocument();
 
       const puzzlePieces = getAllPuzzlePieces(screen);
@@ -76,6 +76,15 @@ describe('SlidingPuzzle', () => {
 
       const moveCount = getMoveCount(screen);
       expect(moveCount).toBeInTheDocument();
+    });
+
+    it('renders congratulations text if puzzle is solved', () => {
+      const initialState = getInitialState({ board: { isSolved: true } });
+
+      const screen = render(<SlidingPuzzle initialState={initialState} />);
+
+      const congratulationsText = screen.getByText(/Yay! It is solved/i);
+      expect(congratulationsText).toBeInTheDocument();
     });
 
     it('should initialize board when start button is clicked', () => {

@@ -1,4 +1,4 @@
-import { StyledPuzzlePiece } from './PuzzlePiece.styles';
+import { StyledPuzzlePiece } from './PuzzlePiece.style';
 import { getPosition } from './utils/getPosition';
 
 type Props = {

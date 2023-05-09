@@ -1,6 +1,6 @@
-import { createBoard } from 'components/SlidingPuzzle/utils/createBoard';
+import { createBoard } from 'utils/createBoard';
 import { reducer } from '../reducer';
-import type { Action } from '../types';
+import { Action, ActionTypes } from '../types';
 
 const BLANK_STATE = {
   initialBoard: null,
@@ -12,7 +12,7 @@ const BLANK_STATE = {
 describe('reducer', () => {
   describe('init', () => {
     it('should initialize the board and shuffle it', () => {
-      const action: Action = { type: 'init', size: 3 };
+      const action: Action = { type: ActionTypes.INIT, size: 3 };
       const newState = reducer(BLANK_STATE, action);
 
       expect(newState.initialBoard).toHaveLength(3);
@@ -39,7 +39,7 @@ describe('reducer', () => {
         isSolved: false
       };
 
-      const action: Action = { type: 'shuffle' };
+      const action: Action = { type: ActionTypes.SHUFFLE };
       const nextState = reducer(state, action);
       expect(nextState.initialBoard).not.toEqual(nextState.currentBoard);
       expect(nextState.currentBoard).toHaveLength(
@@ -94,7 +94,13 @@ describe('reducer', () => {
         level: 3,
         isSolved: false
       };
-      const action: Action = { type: 'move', y: 0, x: 0, moveY: 0, moveX: 1 };
+      const action: Action = {
+        type: ActionTypes.MOVE,
+        y: 0,
+        x: 0,
+        moveY: 0,
+        moveX: 1
+      };
       const newState = reducer(initialState, action);
 
       expect(newState.currentBoard[0][0].value).toBe(2);
@@ -131,7 +137,13 @@ describe('reducer', () => {
         isSolved: false
       };
 
-      const action: Action = { type: 'move', y: 0, x: 0, moveY: 0, moveX: 0 };
+      const action: Action = {
+        type: ActionTypes.MOVE,
+        y: 0,
+        x: 0,
+        moveY: 0,
+        moveX: 0
+      };
       const nextState = reducer(state, action);
 
       expect(nextState).toEqual(state);
@@ -140,8 +152,13 @@ describe('reducer', () => {
 
   describe('levelup', () => {
     it('should increase the level and expand the board', () => {
-      const initialState = reducer(BLANK_STATE, { type: 'init', size: 3 });
-      const nextLevelState = reducer(initialState, { type: 'levelup' });
+      const initialState = reducer(BLANK_STATE, {
+        type: ActionTypes.INIT,
+        size: 3
+      });
+      const nextLevelState = reducer(initialState, {
+        type: ActionTypes.LEVELUP
+      });
 
       expect(nextLevelState.level).toEqual(4);
       expect(nextLevelState.initialBoard.length).toEqual(4);
