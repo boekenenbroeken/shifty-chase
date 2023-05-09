@@ -1,6 +1,6 @@
 # Shifty Chase
 
-Shifty Chase is a simple web application for playing a sliding puzzle game. The game is built using React, and Typescript. The game allows the user to slide tiles to arrange them in the correct order and win the game. The app has been built using Parcel bundler and TypeScript.
+Shifty Chase is a simple web application for playing a sliding puzzle game. The game is built using Parcel, React, and Typescript. The game allows the user to slide tiles to arrange them in the correct order and win the game. 
 
 ## Installation
 
